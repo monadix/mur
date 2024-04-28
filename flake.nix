@@ -1,5 +1,5 @@
 {
-  description = "My personal NUR repository";
+  description = "Myxa's (nix) User Repository";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   };
