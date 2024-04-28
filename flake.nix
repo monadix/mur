@@ -19,6 +19,7 @@
       in
       {
         packages = nixpkgs.lib.filterAttrs (_: v: nixpkgs.lib.isDerivation v) mup;
+        overlays.default = final: prev: import ./overlay.nix final prev;
 
         defaultPackage = pkgs.buildEnv {
           name = "mur";
