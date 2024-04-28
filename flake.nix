@@ -1,24 +1,34 @@
 {
   description = "Myxa's (nix) User Repository";
+
+  nixConfig = {
+    extra-substituters = "https://mur.cachix.org";
+    extra-trusted-public-keys = "mur.cachix.org-1:VncNRWnvAh+Pl71texI+mPOiwTB5267t029meC4HBC0=";
+  };
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
   };
-  outputs = { self, nixpkgs }:
-    let
-      systems = [
-        "x86_64-linux"
-        "i686-linux"
-        "x86_64-darwin"
-        "aarch64-linux"
-        "armv6l-linux"
-        "armv7l-linux"
-      ];
-      forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f system);
-    in
-    {
-      legacyPackages = forAllSystems (system: import ./default.nix {
+
+  outputs = { self, nixpkgs, flake-utils }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let
         pkgs = import nixpkgs { inherit system; };
-      });
-      packages = forAllSystems (system: nixpkgs.lib.filterAttrs (_: v: nixpkgs.lib.isDerivation v) self.legacyPackages.${system});
-    };
+        mup = import ./default.nix { inherit pkgs; };
+      in
+      {
+        packages = nixpkgs.lib.filterAttrs (_: v: nixpkgs.lib.isDerivation v) mup;
+
+        defaultPackage = pkgs.buildEnv {
+          name = "mur";
+          paths = builtins.attrValues self.packages.${system};
+        };
+
+        devShells.default = pkgs.mkShell {
+          buildInputs = [ self.defaultPackage.${system} ];
+        };
+      }
+    );
 }
+
