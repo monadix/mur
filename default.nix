@@ -14,5 +14,5 @@
   modules = import ./modules; # NixOS modules
   overlays = import ./overlays; # nixpkgs overlays
 
-  ayugram = pkgs.callPackage ./pkgs/ayugram.nix { };
+  ayugram-desktop = pkgs.callPackage ./pkgs/ayugram.nix { };
 }
