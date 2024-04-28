@@ -21,6 +21,18 @@ rec {
     ln -s $out/{Applications/${mainProgram}.app/Contents/MacOS,bin}
   '';
 
+  # Since original desktop file is for Flatpak, we need to fix it.
+  postInstall = lib.optionalString stdenv.isLinux ''
+    # Rudiment: related functionaity is disabled by disabling autoupdater
+    # and it breaks .desktop file in Aylur's Gtk Shell (with it it makes to not to be seen by app launcher).
+    # https://github.com/AyuGram/AyuGramDesktop/blob/5566a8ca0abe448a7f1865222b64b68ed735ee07/Telegram/SourceFiles/platform/linux/specific_linux.cpp#L455
+    substituteInPlace $out/share/applications/com.ayugram.desktop.desktop --replace-fail 'Exec=DESKTOPINTEGRATION=1 ' 'Exec='
+
+    # Since we aren't in Flakpak, "DBusActivatable", there any no unit to activate and it makes .desktop file give 
+    # "Could not activate remote peer 'com.ayugram.desktop': unit failed" error (at least on KDE6).
+    substituteInPlace $out/share/applications/com.ayugram.desktop.desktop --replace-fail 'DBusActivatable=true' '# DBusActivatable=true'
+  '';
+
   postFixup = lib.optionalString stdenv.isLinux ''
     # This is necessary to run Telegram in a pure environment.
     # We also use gappsWrapperArgs from wrapGAppsHook.
