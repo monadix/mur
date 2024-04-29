@@ -22,12 +22,13 @@
         perSystem = { config, self', inputs', pkgs, system, lib, ... }:
           let
             mur = import ./default.nix { inherit pkgs; };
+            packages = lib.filterAttrs (_: v: lib.isDerivation v) mur;
           in
           {
-            packages = lib.filterAttrs (_: v: lib.isDerivation v) mur // {
+            packages = packages // {
               default = pkgs.buildEnv {
                 name = "mur";
-                paths = builtins.attrValues mur;
+                paths = builtins.attrValues packages;
               };
             };
 
