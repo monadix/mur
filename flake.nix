@@ -8,28 +8,33 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
+    flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
-      let
-        pkgs = import nixpkgs { inherit system; };
-        mup = import ./default.nix { inherit pkgs; };
-      in
+  outputs = inputs@{ flake-parts, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; }
       {
-        packages = nixpkgs.lib.filterAttrs (_: v: nixpkgs.lib.isDerivation v) mup;
-        overlays.default = final: prev: import ./overlay.nix final prev;
-
-        defaultPackage = pkgs.buildEnv {
-          name = "mur";
-          paths = builtins.attrValues self.packages.${system};
+        flake = {
+          overlays.default = final: prev: import ./overlay.nix final prev;
         };
 
-        devShells.default = pkgs.mkShell {
-          buildInputs = [ self.defaultPackage.${system} ];
-        };
-      }
-    );
+        systems = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" ];
+        perSystem = { config, self', inputs', pkgs, system, lib, ... }:
+          let
+            mur = import ./default.nix { inherit pkgs; };
+          in
+          {
+            packages = lib.filterAttrs (_: v: lib.isDerivation v) mur // {
+              default = pkgs.buildEnv {
+                name = "mur";
+                paths = builtins.attrValues mur;
+              };
+            };
+
+            devShells.default = pkgs.mkShell {
+              buildInputs = [ self'.packages.default ];
+            };
+          };
+      };
 }
 
