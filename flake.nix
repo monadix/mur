@@ -29,6 +29,7 @@
             list-repo = pkgs.callPackage ./list-repo.nix { inherit pkgs packages overlays; }; # the binary is called "mur"
           in
           {
+            legacyPackages = mur;
             packages = packages // {
               # Default package that creates env with all packages. Pretty self-explanatory.
               default = pkgs.buildEnv {
