@@ -1,5 +1,7 @@
 { pkgs, packages, overlays, ... }:
 let
+  # text generated with https://patorjk.com/software/taag/
+  # kitty from https://user.xmission.com/~emailbox/ascii_cats.htm by hjw
   art = builtins.readFile ./ascii.art;
   packagesList = pkgs.lib.attrValues packages;
 in
