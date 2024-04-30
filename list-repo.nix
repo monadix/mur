@@ -8,8 +8,7 @@ with builtins; pkgs.writeScriptBin "mur" ''
   #!${pkgs.bash}/bin/bash
   ${pkgs.lolcat}/bin/lolcat --animate --duration=1 --speed=60 ${./ascii.art}
 
-  echo "
-  or mur～
+  echo "or mur～
   Packages (${toString (length packagesList)}):
   ${concatStringsSep "\n" (map (p: "${p.pname} (${p.version}): ${if p.meta ? longDescription then p.meta.longDescription else p.meta.description}") packagesList)}
   "''
