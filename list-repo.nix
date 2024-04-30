@@ -6,7 +6,7 @@ let
   packagesList = pkgs.lib.attrValues packages;
 in
 with builtins; pkgs.writeScriptBin "mur" ''
-  #!/usr/bin/env bash
+  #!${pkgs.bash}/bin/bash
   cat << "EOF"
   ${art}
   EOF
