@@ -6,7 +6,7 @@ let
 in
 with builtins; pkgs.writeScriptBin "mur" ''
   #!${pkgs.bash}/bin/bash
-  cat ${./ascii.art}
+  ${pkgs.lolcat}/bin/lolcat --animate --duration=1 --speed=60 ${./ascii.art}
 
   echo "
   or mur～
