@@ -10,5 +10,5 @@ with builtins; pkgs.writeScriptBin "mur" ''
 
   echo "or mur～
   Packages (${toString (length packagesList)}):
-  ${concatStringsSep "\n" (map (p: "${p.pname} (${p.version}): ${if p.meta ? longDescription then p.meta.longDescription else p.meta.description}") packagesList)}
+  ${concatStringsSep "\n" (map (p: "· ${p.pname} (${p.version}):\n\t${if p.meta ? longDescription then p.meta.longDescription else p.meta.description}") packagesList)}
   "''
