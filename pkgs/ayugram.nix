@@ -1,11 +1,11 @@
 { pkgs, ... }:
 pkgs.telegram-desktop.overrideAttrs (
-  old:
+  finalAttrs: previousAttrs: 
   with pkgs;
   let
     mainProgram = if stdenv.isLinux then "ayugram-desktop" else "Ayugram";
   in
-  finalAttrs: previousAttrs: {
+  {
     pname = "ayugram-desktop";
     version = "4.16.8";
 
