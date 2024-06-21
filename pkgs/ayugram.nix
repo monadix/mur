@@ -8,6 +8,7 @@ pkgs.telegram-desktop.overrideAttrs (
   {
     pname = "ayugram-desktop";
     version = "5.1.2";
+    __contentAddressed = true;
 
     src = fetchFromGitHub {
       owner = "AyuGram";
