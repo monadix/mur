@@ -32,8 +32,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: cachix/install-nix-action@v27
-        with:
-          extra_nix_config: "extra-experimental-features = nix-command flakes ca-derivations"
       - uses: cachix/cachix-action@v15
         with:
           name: mur
@@ -49,8 +47,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: cachix/install-nix-action@v27
-        with:
-          extra_nix_config: "extra-experimental-features = nix-command flakes ca-derivations"
       - uses: cachix/cachix-action@v15
         with:
           name: mur
