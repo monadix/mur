@@ -37,7 +37,7 @@ jobs:
           name: mur
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - name: Build "${{ matrix.attr }}"
-        run: nix build -L ".#${{ matrix.attr }}"
+        run: nix build -L ".#${{ matrix.attr }}" --extra-experimental-features ca-derivations
 
   nix-build-stable:
     needs: nix-matrix
@@ -52,4 +52,4 @@ jobs:
           name: mur
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - name: Build "${{ matrix.attr }}"
-        run: nix build --inputs-from . --override-input nixpkgs stable -L ".#${{ matrix.attr }}"
+        run: nix build --inputs-from . --override-input nixpkgs stable -L ".#${{ matrix.attr }}" --extra-experimental-features ca-derivations
