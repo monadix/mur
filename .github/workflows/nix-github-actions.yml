@@ -25,6 +25,7 @@ jobs:
         swap-storage: false
 
   nix-matrix:
+    needs: free-disk-space
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
