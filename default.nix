@@ -6,7 +6,7 @@
 # commands such as:
 #     nix-build -A mypackage
 
-{ pkgs ? import <nixpkgs> { } }:
+{ pkgs ? import <nixpkgs> { }, ayugramDesktop, ... }:
 
 {
   # The `lib`, `modules`, and `overlays` names are special
@@ -14,7 +14,7 @@
   modules = import ./modules; # NixOS modules
   overlays = import ./overlays; # nixpkgs overlays
 
-  ayugram-desktop = pkgs.callPackage ./pkgs/ayugram.nix { };
+  ayugram-desktop = pkgs.callPackage ./pkgs/ayugram.nix { inherit ayugramDesktop; };
   sdhlt = pkgs.callPackage ./pkgs/sdhlt.nix { };
   hashlink = pkgs.callPackage ./pkgs/updated/hashlink.nix { };
 }

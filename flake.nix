@@ -7,7 +7,7 @@
   };
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs?rev=30439d93eb8b19861ccbe3e581abf97bdc91b093";
     stable.url = "github:NixOS/nixpkgs/nixos-24.05";
     flake-parts.url = "github:hercules-ci/flake-parts";
 
@@ -15,10 +15,16 @@
       url = "github:nix-community/nix-github-actions";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    ayugramDesktop = {
+      url = "git+https://github.com/AyuGram/AyuGramDesktop?submodules=1";
+
+      flake = false;
+    };
   };
 
   outputs =
-    inputs@{ self, flake-parts, ... }:
+    inputs@{ self, flake-parts, ayugramDesktop, ... }:
     let
       overlays = final: prev: import ./overlay.nix final prev;
       lib = inputs.nixpkgs.lib;
@@ -67,7 +73,7 @@
           ...
         }:
         let
-          mur = import ./default.nix { inherit pkgs; };
+          mur = import ./default.nix { inherit pkgs ayugramDesktop; };
           packages = lib.filterAttrs (_: v: lib.isDerivation v) mur;
           list-repo = pkgs.callPackage ./list-repo.nix { inherit pkgs packages overlays; }; # the binary is called "mur"
         in

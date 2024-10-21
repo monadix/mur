@@ -1,4 +1,7 @@
-{ pkgs, ... }:
+{ pkgs
+, ayugramDesktop
+, ... 
+}:
 pkgs.telegram-desktop.overrideAttrs (
   finalAttrs: previousAttrs: 
   with pkgs;
@@ -9,13 +12,7 @@ pkgs.telegram-desktop.overrideAttrs (
     pname = "ayugram-desktop";
     version = "5.4.1";
 
-    src = fetchFromGitHub {
-      owner = "AyuGram";
-      repo = "AyuGramDesktop";
-      rev = "v${finalAttrs.version}";
-      fetchSubmodules = true;
-      hash = "sha256-7KmXA3EDlCszoUfQZg3UsKvfRCENy/KLxiE08J9COJ8=";
-    };
+    src = ayugramDesktop;
 
     installPhase = lib.optionalString stdenv.isDarwin ''
       mkdir -p $out/Applications
